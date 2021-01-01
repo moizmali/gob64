@@ -22,18 +22,14 @@ import (
 	"encoding/gob"
 )
 
-func Unmarshall(s string, v interface{}) error {
-	b, err := base64.StdEncoding.DecodeString(s)
+func Marshal(v interface{}) (string, error) {
+	buff := bytes.Buffer{}
+	err := gob.NewEncoder(&buff).Encode(v)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	buff := bytes.NewBuffer(b)
+	s := base64.StdEncoding.EncodeToString(buff.Bytes())
 
-	err = gob.NewDecoder(buff).Decode(v)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return s, nil
 }
