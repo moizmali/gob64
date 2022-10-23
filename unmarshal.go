@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 github.com/moizalicious
+ * Copyright 2022 github.com/moizalicious
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import (
 	"encoding/gob"
 )
 
+// Unmarshal decodes a base64 string which is then decoded from gob to a given value.
 func Unmarshal(s string, v interface{}) error {
 	b, err := base64.StdEncoding.DecodeString(s)
 	if err != nil {

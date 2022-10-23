@@ -17,20 +17,28 @@
 package gob64
 
 import (
-	"bytes"
-	"encoding/base64"
-	"encoding/gob"
+	"testing"
 )
 
-// Marshal encodes a value to gob which is then encoded to base64 string.
-func Marshal(v interface{}) (string, error) {
-	buff := bytes.Buffer{}
-	err := gob.NewEncoder(&buff).Encode(v)
-	if err != nil {
-		return "", err
+func TestUnmarshal(t *testing.T) {
+	type data struct {
+		Foo string
+		Bar string
 	}
 
-	s := base64.StdEncoding.EncodeToString(buff.Bytes())
+	expected := data{
+		Foo: "ABC",
+		Bar: "XYZ",
+	}
 
-	return s, nil
+	s := "Iv+BAwEBBGRhdGEB/4IAAQIBA0ZvbwEMAAEDQmFyAQwAAAAN/4IBA0FCQwEDWFlaAA=="
+
+	var actual data
+	if err := Unmarshal(s, &actual); err != nil {
+		t.Fatalf("Unmarshal failed: %v", err)
+	}
+
+	if actual != expected {
+		t.Errorf("Failed to unmarshal data.\nExpected Value:%v\nActual Value:%v", expected, actual)
+	}
 }
